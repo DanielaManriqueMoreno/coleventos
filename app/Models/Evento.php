@@ -66,4 +66,14 @@ class Evento extends Model
     {
         return $this->hasMany(Compra::class);
     }
+
+    public function localidades()
+    {
+        return $this->belongsToMany(
+            Localidad::class,
+            'boleteria',     // tabla pivot
+            'evento_id',     // FK de evento en la pivot
+            'localidad_id'   // FK de localidad en la pivot
+        )->withPivot('valor_boleta', 'cantidad_disponible');
+    }
 }
