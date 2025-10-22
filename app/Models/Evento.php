@@ -12,16 +12,12 @@ class Evento extends Model
     use HasFactory;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * La tabla asociada al modelo.
      */
     protected $table = 'evento';
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Atributos asignables masivamente.
      */
     protected $fillable = [
         'nombre',
@@ -33,9 +29,7 @@ class Evento extends Model
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
+     * Cast de atributos.
      */
     protected $casts = [
         'fecha_hora_inicio' => 'datetime',
@@ -43,20 +37,19 @@ class Evento extends Model
     ];
 
     /**
-     * Los artistas que pertenecen al evento (Relación N:M).
+     * Relación N:M con artistas.
      */
     public function artistas(): BelongsToMany
     {
-        // Se especifica la tabla pivote 'artista_evento'
         return $this->belongsToMany(Artista::class, 'artista_evento');
     }
 
     /**
-     * Un evento tiene muchas configuraciones de boletería.
+     * Un evento tiene muchas boleterías.
      */
-    public function boleteria(): HasMany
+    public function boleterias(): HasMany
     {
-        return $this->hasMany(Boleteria::class);
+        return $this->hasMany(Boleteria::class, 'evento_id');
     }
 
     /**
@@ -64,16 +57,19 @@ class Evento extends Model
      */
     public function compras(): HasMany
     {
-        return $this->hasMany(Compra::class);
+        return $this->hasMany(Compra::class, 'evento_id');
     }
 
-    public function localidades()
+    /**
+     * Relación con localidades a través de la tabla boleteria.
+     */
+    public function localidades(): BelongsToMany
     {
         return $this->belongsToMany(
             Localidad::class,
-            'boleteria',     // tabla pivot
-            'evento_id',     // FK de evento en la pivot
-            'localidad_id'   // FK de localidad en la pivot
+            'boleteria',    // tabla pivot
+            'evento_id',    // FK del evento en pivot
+            'localidad_id'  // FK de la localidad en pivot
         )->withPivot('valor_boleta', 'cantidad_disponible');
     }
 }
