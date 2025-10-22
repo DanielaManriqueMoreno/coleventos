@@ -74,7 +74,7 @@
                             </div>
                             <div class="card-footer bg-white">
                                 <div class="d-grid gap-2">
-                                    <a href="/login" class="btn btn-comprar text-white">Comprar Boletas</a>
+                                    <a href="/register" class="btn btn-comprar text-white">Comprar Boletas</a>
                                 </div>
                             </div>
                         </div>

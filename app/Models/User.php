@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,8 +12,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -29,8 +26,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -39,21 +34,38 @@ class User extends Authenticatable
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
+            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    /**
-     * Un usuario (comprador) puede tener muchas compras.
-     */
-    public function compras(): HasMany
+    public function isComprador()
     {
-        return $this->hasMany(Compra::class);
+        return $this->rol === 'comprador';
+    }
+
+    /**
+     * Verificar si el usuario es administrador
+     */
+    public function isAdmin()
+    {
+        return $this->rol === 'admin';
+    }
+
+     public function scopeCompradores($query)
+    {
+        return $query->where('rol', 'comprador');
+    }
+
+    /**
+     * Scope para usuarios administradores
+     */
+    public function scopeAdministradores($query)
+    {
+        return $query->where('rol', 'admin');
     }
 }

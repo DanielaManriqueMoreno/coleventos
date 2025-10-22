@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Route;
 // Rutas públicas
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Panel administrador
+Route::get('/admin/index', function () {
+    return view('admin.index');
+})->name('admin.index')->middleware('auth');
+
+// Panel comprador
+Route::get('/comprador/index', function () {
+    return view('comprador.index');
+})->name('comprador.index')->middleware('auth');
+
+
 // Rutas de autenticación
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
