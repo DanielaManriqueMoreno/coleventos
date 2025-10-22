@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\EventoPublicController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // =============================
@@ -46,6 +48,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/comprar', [CompraController::class, 'store'])->name('compras.store');
     // Historial de compras
     Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
+
+    Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('/mi-perfil/password', [PasswordController::class, 'edit'])->name('profile.password.edit');
+    Route::put('/mi-perfil/password', [PasswordController::class, 'update'])->name('profile.password.update');
 });    
 
 // =============================
