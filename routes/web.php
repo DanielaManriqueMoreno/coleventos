@@ -36,20 +36,19 @@ Route::get('/admin/index', function () {
 // =============================
 //  PANEL COMPRADOR
 // =============================
-Route::middleware(['auth'])->prefix('comprador')->group(function () {
+Route::get('/comprador/index', function () {
+    return redirect()->route('comprador.eventos.index');
+})->name('comprador.index')->middleware('auth');
 
-    // Listado de eventos → ahora /comprador directamente
-    Route::get('/', [EventoPublicController::class, 'index'])->name('comprador.eventos.index');
-
-    // Ver detalles de un evento
-    Route::get('/eventos/{id}', [EventoPublicController::class, 'show'])->name('comprador.eventos.show');
-
+Route::middleware(['auth'])->group(function () {
+    // Listado de eventos
+    Route::get('/comprador/eventos', [EventoPublicController::class, 'index'])->name('comprador.eventos.index');
+    // Ver evento
+    Route::get('/comprador/eventos/{id}', [EventoPublicController::class, 'show'])->name('comprador.eventos.show');
     // Formulario de compra
     Route::get('/comprar/{evento}', [CompraController::class, 'create'])->name('compras.create');
-
     // Guardar compra
     Route::post('/comprar', [CompraController::class, 'store'])->name('compras.store');
-
     // Historial de compras
     Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
 });
