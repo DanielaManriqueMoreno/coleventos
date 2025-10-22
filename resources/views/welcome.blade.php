@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventos - Ferias de Colombia</title>
+    <title>Eventos - ColEventos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .event-card {
@@ -46,6 +46,21 @@
             <p class="lead mb-0">Descubre todas las ferias y eventos en Colombia</p>
         </div>
     </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="container my-4">
+        <form action="{{ route('evento.search') }}" method="GET" class="input-group">
+            <input 
+                type="text" 
+                name="busqueda" 
+                class="form-control" 
+                placeholder="Buscar evento, municipio o departamento..." 
+                value="{{ request('busqueda') }}"
+            >
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </form>
+    </div>
+
 
     <!-- Lista de Eventos -->
     <div class="container py-5">

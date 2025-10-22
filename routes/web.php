@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Rutas públicas
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/evento/buscar', [EventoController::class, 'search'])->name('evento.search');
 
 // Panel administrador
 Route::get('/admin/index', function () {

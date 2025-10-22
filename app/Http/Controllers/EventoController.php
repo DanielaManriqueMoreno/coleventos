@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Evento;
@@ -98,5 +98,24 @@ class EventoController extends Controller
         }
 
         return redirect()->route('evento.index');
+    }
+
+    public function search(request $request)
+    {
+        $busqueda = $request->input('busqueda');
+
+        // Si no hay texto, redirige al index
+        if (empty($busqueda)) {
+            return redirect()->route('evento.index');
+        }
+
+        // Buscar por nombre, municipio o departamento
+        $eventos = Evento::where('nombre', 'like', "%{$busqueda}%")
+            ->orWhere('municipio', 'like', "%{$busqueda}%")
+            ->orWhere('departamento', 'like', "%{$busqueda}%")
+            ->orderBy('fecha_hora_inicio', 'asc')
+            ->get();
+
+        return view('evento.index', compact('eventos', 'busqueda'));
     }
 }
