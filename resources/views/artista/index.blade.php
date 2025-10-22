@@ -16,25 +16,27 @@
         <table id="table_data" class="table table-striped table-hover">
             <thead>
                 <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Genero</th>
-                <th>Ciudad</th>
-                <th>Acciones</th>
-            </tr>
+                    <th>Id</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Género Musical</th>
+                    <th>Ciudad Natal</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach ($artistas as $artista)
                 <tr>
-                    <td>{{ $artista["id"] }}</td>
-                    <td>{{ $artista["nombre"] }}</td>
-                    <td>{{ $artista["genero"] }}</td>
-                    <td>{{ $artista["ciudad_origen"] }}</td>
+                    <td>{{ $artista->id }}</td>
+                    <td>{{ $artista->nombres }}</td>
+                    <td>{{ $artista->apellidos }}</td>
+                    <td>{{ $artista->genero_musical }}</td>
+                    <td>{{ $artista->ciudad_natal }}</td>
                     <td>
-                        <a href="{{ route('artista.edit', $artista["id"]) }}"  class="btn btn-primary btn-circle btn-sm" title="Editar">
+                        <a href="{{ route('artista.edit', $artista->id) }}"  class="btn btn-primary btn-circle btn-sm" title="Editar">
                             <i class="far fa-edit"></i>
                         </a>
-                        <a href="{{ route('artista.destroy', $artista["id"]) }}" class="btn btn-danger btn-circle btn-sm" title="Eliminar" onclick="return remove();">
+                        <a href="{{ route('artista.destroy', $artista->id) }}" class="btn btn-danger btn-circle btn-sm" title="Eliminar" onclick="return remove();">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
@@ -44,7 +46,6 @@
         </table>
     </div>
 </div>
-
 
 @endsection
 
