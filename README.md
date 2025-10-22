@@ -108,7 +108,7 @@ php artisan serve
     <td align="center">
       <a href="https://github.com/DanielaManriqueMoreno">
         <img src="https://github.com/DanielaManriqueMoreno.png" width="100px;" alt="H2kl0"/><br />
-        <sub><b>Juan Fernando Velásquez Sarmiento</b></sub>
+        <sub><b>DanielaManriqueMoreno</b></sub>
       </a>
     </td>
     <td align="center">
