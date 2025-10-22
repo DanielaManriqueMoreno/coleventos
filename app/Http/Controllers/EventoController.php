@@ -30,12 +30,12 @@ class EventoController extends Controller
     public function index()
     {
         $eventos = Evento::all();
-        return view('evento.index', compact('eventos'));
+        return view('admin.evento.index', compact('eventos'));
     }
 
     public function create()
     {
-        return view('evento.create');
+        return view('admin.evento.create');
     }
 
     public function store(Request $request)
@@ -43,18 +43,18 @@ class EventoController extends Controller
         $validator = Validator::make($request->all(), $this->rules);
         $validator->setAttributeNames($this->traductionAttributes);
         if ($validator->fails()) {
-            return redirect()->route('evento.create')->withInput()->withErrors($validator);
+            return redirect()->route('admin.evento.create')->withInput()->withErrors($validator);
         }
 
         Evento::create($request->all());
         session()->flash('message', 'Evento creado exitosamente');
-        return redirect()->route('evento.index');
+        return redirect()->route('admin.evento.index');
     }
 
     public function show(string $id)
     {
         // Redirigir a editar, ya que 'show' es más para el público
-        return redirect()->route('evento.edit', $id);
+        return redirect()->route('admin.evento.edit', $id);
     }
 
     public function edit(string $id)
@@ -73,7 +73,7 @@ class EventoController extends Controller
         $validator = Validator::make($request->all(), $this->rules);
         $validator->setAttributeNames($this->traductionAttributes);
         if ($validator->fails()) {
-            return redirect()->route('evento.edit', $id)->withInput()->withErrors($validator);
+            return redirect()->route('admin.evento.edit', $id)->withInput()->withErrors($validator);
         }
 
         $evento = Evento::find($id);
@@ -84,7 +84,7 @@ class EventoController extends Controller
             session()->flash('warning', 'No se encuentra el evento solicitado');
         }
 
-        return redirect()->route('evento.index');
+        return redirect()->route('admin.evento.index');
     }
 
     public function destroy(string $id)
@@ -97,7 +97,7 @@ class EventoController extends Controller
             session()->flash('warning', 'No se encuentra el evento solicitado');
         }
 
-        return redirect()->route('evento.index');
+        return redirect()->route('admin.evento.index');
     }
 
     public function search(request $request)
@@ -106,7 +106,7 @@ class EventoController extends Controller
 
         // Si no hay texto, redirige al index
         if (empty($busqueda)) {
-            return redirect()->route('evento.index');
+            return redirect()->route('admin.evento.index');
         }
 
         // Buscar por nombre, municipio o departamento
@@ -116,6 +116,6 @@ class EventoController extends Controller
             ->orderBy('fecha_hora_inicio', 'asc')
             ->get();
 
-        return view('evento.index', compact('eventos', 'busqueda'));
+        return view('admin.sevento.index', compact('eventos', 'busqueda'));
     }
 }

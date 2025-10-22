@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Artista;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -26,18 +25,19 @@ class ArtistaController extends Controller
     public function index()
     {
         $artistas = Artista::all();
-        return view('artista.index', compact('artistas'));
+        return view('admin.artista.index', compact('artistas'));
     }
 
     public function create()
     {
-        return view('artista.create');
+        return view('admin.artista.create');
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), $this->rules);
         $validator->setAttributeNames($this->traductionAttributes);
+        
         if ($validator->fails()) {
             return redirect()->route('artista.create')->withInput()->withErrors($validator);
         }
@@ -55,23 +55,26 @@ class ArtistaController extends Controller
     public function edit(string $id)
     {
         $artista = Artista::find($id);
+        
         if ($artista) {
-            return view('artista.edit', compact('artista'));
-        } else {
-            session()->flash('warning', 'No se encuentra el artista solicitado');
-            return redirect()->route('artista.index');
+            return view('admin.artista.edit', compact('artista'));
         }
+        
+        session()->flash('warning', 'No se encuentra el artista solicitado');
+        return redirect()->route('artista.index');
     }
 
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), $this->rules);
         $validator->setAttributeNames($this->traductionAttributes);
+        
         if ($validator->fails()) {
             return redirect()->route('artista.edit', $id)->withInput()->withErrors($validator);
         }
 
         $artista = Artista::find($id);
+        
         if ($artista) {
             $artista->update($request->all());
             session()->flash('message', 'Artista actualizado exitosamente');
@@ -85,6 +88,7 @@ class ArtistaController extends Controller
     public function destroy(string $id)
     {
         $artista = Artista::find($id);
+        
         if ($artista) {
             $artista->delete();
             session()->flash('message', 'Artista eliminado exitosamente');

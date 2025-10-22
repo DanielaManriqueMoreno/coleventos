@@ -91,7 +91,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Redirección según rol
-            if ($user->rol === 'administrador') {
+            if ($user->rol === 'admin') {
                 return redirect()->route('admin.index')->with('success', 'Bienvenido administrador');
             } elseif ($user->rol === 'comprador') {
                 return redirect()->route('comprador.index')->with('success', 'Bienvenido comprador');
