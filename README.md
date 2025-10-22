@@ -1,61 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 🎟️ COL EVENTOS
+
+**COL EVENTOS** es una aplicación web monolítica desarrollada en **Laravel 12** con **MySQL**, creada para la **competencia Senasoft 2025** en la categoría **Mujeres Digitales**, realizada en **Pereira, Risaralda**.  
+El proyecto tiene como objetivo la **gestión integral de eventos y venta de boletería online** en las diferentes festividades de Colombia, facilitando la administración de **eventos, artistas, localidades y compras de boletas**, con un enfoque en **usabilidad, eficiencia y seguridad**.
+
+---
+
+### 💻 Tecnologías utilizadas
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/PHP-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" height="25">
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" height="25">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" height="25">
+  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" height="25">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" height="25">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" height="25">
 </p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Funcionalidades principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 🎉 **Gestión de eventos:**
+  - Creación y administración de eventos con nombre, descripción, fechas, municipio y departamento.
+  - Asociación de artistas y validación de horarios sin conflictos.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- 🎤 **Módulo de artistas:**
+  - Registro de artistas con nombre, género musical y ciudad natal.
 
-## Learning Laravel
+- 🪑 **Gestión de localidades y boletería:**
+  - Creación de localidades y asignación de boletas por evento.
+  - Control de cantidad disponible y valor por localidad.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 💳 **Compras de boletas:**
+  - Sistema de compra autenticado.
+  - Límite de 10 boletas por transacción.
+  - Validación de disponibilidad y registro de estado de transacción.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- 👤 **Usuarios y autenticación:**
+  - Registro, inicio de sesión y actualización de perfil.
+  - Roles: administrador y comprador.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- 📊 **Reportes e historial:**
+  - Consulta de compras por usuario autenticado.
+  - Detalle de evento, localidad, cantidad, valor total y estado.
 
-## Laravel Sponsors
+- 🌐 **Interfaz y usabilidad:**
+  - Plantilla responsiva con **Bootstrap**.
+  - Navegación clara y validaciones dinámicas.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🗄️ Estructura de la base de datos
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Basada en los requerimientos del **Reto Mujeres Digitales**, la base de datos `coleventos` contiene las siguientes entidades principales:
 
-## Contributing
+- **users** → Usuarios del sistema (administrador / comprador).  
+- **evento** → Eventos con fecha, hora, municipio y descripción.  
+- **artista** → Artistas asociados a eventos.  
+- **localidad** → Localidades disponibles para boletería.  
+- **boleteria** → Relación evento-localidad con control de inventario.  
+- **compra** → Registro de transacciones de boletas.  
+- **artista_evento** → Asociación muchos a muchos entre artistas y eventos.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🚀 Comenzando
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Requisitos previos
 
-## Security Vulnerabilities
+- PHP **8.2+**  
+- Composer  
+- MySQL **8.x**  
+- Node.js y npm (para assets con Vite)  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+### Instalación
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# 1. Clona el repositorio
+git clone https://github.com/DanielaManriqueMoreno/coleventos.git
+cd coleventos
+
+# 2. Instala dependencias
+composer install
+npm install && npm run build
+
+# 3. Configura el entorno
+cp .env.example .env
+php artisan key:generate
+
+# 4. Crea la base de datos
+mysql -u root -p
+CREATE DATABASE coleventos;
+
+# 5. Importa el script SQL
+mysql -u root -p coleventos < coleventos.sql
+
+# 6. Ejecuta el servidor
+php artisan serve
+
+```
+
+## 👥 Colaboradores — Grupo 22
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/DanielaManriqueMoreno">
+        <img src="https://github.com/DanielaManriqueMoreno.png" width="100px;" alt="H2kl0"/><br />
+        <sub><b>Juan Fernando Velásquez Sarmiento</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Linavs18">
+        <img src="https://github.com/Linavs18.png" width="100px;" alt="Linavs18"/><br />
+        <sub><b>Lina Vanessa Salcedo Cuellar</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+---
+## 🏆 Contexto del proyecto
+Proyecto desarrollado para el Reto **“Mujeres Digitales”** de **Senasoft Colombia 2025**, organizado por el **Servicio Nacional de Aprendizaje (SENA) en Pereira, Risaralda**.
+
+El desafío consiste en construir un sistema web para la gestión de boletería y publicidad de eventos en festividades colombianas, cumpliendo con requerimientos funcionales y no funcionales establecidos por el comité organizador.
