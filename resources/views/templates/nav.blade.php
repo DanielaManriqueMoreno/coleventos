@@ -49,10 +49,10 @@
                         </a>
                         <div id="collapseArtistas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="{{ route('artista.index') }}">
+                                <a class="collapse-item" href="{{ route('admin.artista.index') }}">
                                     <i class="fas fa-list"></i> Consultar
                                 </a>
-                                <a class="collapse-item" href="{{ route('artista.create') }}">
+                                <a class="collapse-item" href="{{ route('admin.artista.create') }}">
                                     <i class="fas fa-plus"></i> Crear
                                 </a>
                             </div>
@@ -68,10 +68,10 @@
                         </a>
                         <div id="collapseEventos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="{{ route('evento.index') }}">
+                                <a class="collapse-item" href="{{ route('admin.evento.index') }}">
                                     <i class="fas fa-list"></i> Consultar
                                 </a>
-                                <a class="collapse-item" href="{{ route('evento.create') }}">
+                                <a class="collapse-item" href="{{ route('admin.evento.create') }}">
                                     <i class="fas fa-plus"></i> Crear
                                 </a>
                             </div>
@@ -87,10 +87,10 @@
                         </a>
                         <div id="collapseLocalidad" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="{{ route('localidad.index') }}">
+                                <a class="collapse-item" href="{{ route('admin.localidad.index') }}">
                                     <i class="fas fa-list"></i> Consultar
                                 </a>
-                                <a class="collapse-item" href="{{ route('localidad.create') }}">
+                                <a class="collapse-item" href="{{ route('admin.localidad.create') }}">
                                     <i class="fas fa-plus"></i> Crear
                                 </a>
                             </div>
@@ -106,10 +106,10 @@
                         </a>
                         <div id="collapseBoleteria" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="{{ route('boleteria.index') }}">
+                                <a class="collapse-item" href="{{ route('admin.boleteria.index') }}">
                                     <i class="fas fa-list"></i> Consultar
                                 </a>
-                                <a class="collapse-item" href="{{ route('boleteria.create') }}">
+                                <a class="collapse-item" href="{{ route('admin.boleteria.create') }}">
                                     <i class="fas fa-plus"></i> Crear
                                 </a>
                             </div>
