@@ -26,12 +26,12 @@ class ArtistaController extends Controller
     public function index()
     {
         $artistas = Artista::all();
-        return view('admin.artista.index', compact('artistas'));
+        return view('artista.index', compact('artistas'));
     }
 
     public function create()
     {
-        return view('admin.artista.create');
+        return view('artista.create');
     }
 
     public function store(Request $request)
@@ -56,7 +56,7 @@ class ArtistaController extends Controller
     {
         $artista = Artista::find($id);
         if ($artista) {
-            return view('admin.artista.edit', compact('artista'));
+            return view('artista.edit', compact('artista'));
         } else {
             session()->flash('warning', 'No se encuentra el artista solicitado');
             return redirect()->route('artista.index');
