@@ -19,13 +19,13 @@ class EventoPublicController extends Controller
         }
         $eventos = $query->latest()->paginate(6);
 
-        return view('comprador.eventos.index', compact('eventos'));
+        return view('comprador.index', compact('eventos'));
     }
 
     // Mostrar detalles de un evento
     public function show($id)
     {
         $evento = Evento::with('localidades')->findOrFail($id);
-        return view('comprador.eventos.show', compact('evento'));
+        return view('comprador.show', compact('evento'));
     }
 }

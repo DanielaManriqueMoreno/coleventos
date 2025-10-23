@@ -33,27 +33,21 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // =============================
 //  PANEL COMPRADOR
 // =============================
-Route::get('/comprador/index', function () {
-    return redirect()->route('comprador.eventos.index');
-})->name('comprador.index')->middleware('auth');
+Route::middleware(['auth'])->prefix('comprador')->name('comprador.')->group(function () {
 
-Route::middleware(['auth'])->group(function () {
-    // Listado de eventos
-    Route::get('/comprador/eventos', [EventoPublicController::class, 'index'])->name('comprador.eventos.index');
+    // Redirección desde /comprador/index hacia /comprador/index (listado de eventos)
+    Route::get('/index', [EventoPublicController::class, 'index'])->name('index');
+
     // Ver evento
-    Route::get('/comprador/eventos/{id}', [EventoPublicController::class, 'show'])->name('comprador.eventos.show');
-    // Formulario de compra
-    Route::get('/comprar/{evento}', [CompraController::class, 'create'])->name('compras.create');
-    // Guardar compra
+    Route::get('/evento/{id}', [EventoPublicController::class, 'show'])->name('show');
+
+    // Compras
+     Route::get('/comprar/{evento}', [CompraController::class, 'create'])->name('compras.create');
     Route::post('/comprar', [CompraController::class, 'store'])->name('compras.store');
-    // Historial de compras
     Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
 
-    Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
-
-    Route::get('/mi-perfil/password', [PasswordController::class, 'edit'])->name('profile.password.edit');
-    Route::put('/mi-perfil/password', [PasswordController::class, 'update'])->name('profile.password.update');
+    // Historial de compras
+    Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
 });    
 
 // =============================

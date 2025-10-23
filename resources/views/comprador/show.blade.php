@@ -1,51 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del Evento - Ferias Colombia</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .event-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-top: 2rem;
-        }
-        .event-title {
-            color: #2c3e50;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        .event-image {
-            border-radius: 8px;
-            margin: 1rem 0;
-            max-height: 300px;
-            object-fit: cover;
-            width: 100%;
-        }
-        .info-item {
-            margin-bottom: 1rem;
-            padding: 0.5rem 0;
-        }
-        .info-label {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .btn-success {
-            background-color: #28a745;
-            border: none;
-            padding: 10px 25px;
-            font-weight: 600;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            padding: 10px 25px;
-            font-weight: 600;
-        }
-    </style>
-</head>
+@extends('templates.base')
+@section('title', 'Dashboard')
+@section('header', 'Dashboard - Panel de Control')
+
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+@endsection
+
+@section('content')
+
+@include('templates.messages')
 <body class="bg-light">
     <!-- Navbar -->
     <nav class="navbar navbar-dark bg-dark">
