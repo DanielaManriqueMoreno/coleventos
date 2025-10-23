@@ -9,25 +9,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CompraController extends Controller
 {
-    // Reglas de validación
     private $rules = [
-        'evento_id' => 'required|exists:evento,id',
-        'localidad_id' => 'required|exists:localidad,id',
-        'cantidad_boletas' => 'required|integer|min:1|max:10',
-        'numero_tarjeta' => 'required|string|digits:15',
+        // 'evento_id' se toma del formulario oculto o de la ruta
+        'localidad_id' => 'required|exists:localidad,id', // Tu tabla 'localidad'
+        'cantidad_boletas' => 'required|integer|min:1|max:10', // RF8: Máximo 10
+        'numero_tarjeta' => 'required|string|digits:15', // RF8: Dato de prueba
     ];
 
     private $attributes = [
-        'evento_id' => 'evento',
         'localidad_id' => 'localidad',
         'cantidad_boletas' => 'cantidad de boletas',
         'numero_tarjeta' => 'número de tarjeta',
     ];
 
-    // Historial de compras del usuario
+    /**
+     * RF12: Muestra el historial de compras del usuario autenticado.
+     */
     public function index()
     {
         $compras = Compra::with(['evento', 'localidad'])
@@ -35,31 +36,27 @@ class CompraController extends Controller
             ->latest('fecha_compra')
             ->get();
 
-        return view('compras.index', compact('compras'));
+        return view('comprador.compras.index', compact('compras'));
     }
 
-    // Mostrar formulario de compra
-    public function create($evento_id)
+    public function create(string $evento_id)
     {
-        $evento = Evento::with(['boleterias.localidad'])->findOrFail($evento_id);
-
-        // Extraemos solo la info necesaria de las localidades
-        $localidades = $evento->boleterias->map(function($b) {
-            return [
-                'id' => $b->localidad->id,
-                'nombre_localidad' => $b->localidad->nombre_localidad,
-                'valor_boleta' => $b->valor_boleta,
-                'cantidad_disponible' => $b->cantidad_disponible,
-            ];
-        });
-
-        return view('comprador.compras.create', compact('evento', 'localidades'));
+        $evento = Evento::with(['boleteria.localidad'])->findOrFail($evento_id);
+        return view('comprador.compras.create', compact('evento'));
     }
 
-    // Guardar compra
+
+
+    /**
+     * RF8, RF9, RF10: Procesa y guarda la compra.
+     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules);
+        // Añadimos 'evento_id' a las reglas si viene del formulario
+        $currentRules = $this->rules;
+        $currentRules['evento_id'] = 'required|exists:evento,id'; // Tu tabla 'evento'
+
+        $validator = Validator::make($request->all(), $currentRules);
         $validator->setAttributeNames($this->attributes);
 
         if ($validator->fails()) {
@@ -68,40 +65,50 @@ class CompraController extends Controller
 
         $data = $request->all();
         $cantidadComprar = (int)$data['cantidad_boletas'];
+        $user = Auth::user(); // RF8: Asegura que esté autenticado
 
         try {
-            DB::transaction(function () use ($data, $cantidadComprar) {
-                // Bloquear la boletería para evitar concurrencia
+            DB::transaction(function () use ($data, $cantidadComprar, $user) {
+                
+                // 1. (RF10) Buscar y bloquear boletería
                 $boleteria = Boleteria::where('evento_id', $data['evento_id'])
-                    ->where('localidad_id', $data['localidad_id'])
-                    ->lockForUpdate()
-                    ->firstOrFail();
+                                      ->where('localidad_id', $data['localidad_id'])
+                                      ->lockForUpdate() // Evita concurrencia
+                                      ->firstOrFail(); // Falla si no existe
 
+                // 2. (RF10) Validar disponibilidad
                 if ($boleteria->cantidad_disponible < $cantidadComprar) {
-                    throw new \Exception('No hay suficientes boletas disponibles. Solo quedan ' . $boleteria->cantidad_disponible);
+                    throw ValidationException::withMessages([
+                        'error' => 'No hay suficientes boletas disponibles para la localidad seleccionada. Solo quedan ' . $boleteria->cantidad_disponible
+                    ]);
                 }
 
-                // Descontar stock
+                // 3. (RF9) Descontar boletas
                 $boleteria->cantidad_disponible -= $cantidadComprar;
                 $boleteria->save();
 
-                // Crear la compra
+                // 4. (RF8) Registrar la compra con todos los datos
                 Compra::create([
-                    'user_id' => Auth::id(),
+                    'user_id' => $user->id, // Vincula al usuario y su documento
                     'evento_id' => $data['evento_id'],
                     'localidad_id' => $data['localidad_id'],
                     'cantidad_boletas' => $cantidadComprar,
                     'valor_total' => $boleteria->valor_boleta * $cantidadComprar,
-                    'numero_tarjeta' => $data['numero_tarjeta'],
-                    'estado_transaccion' => 'EXITOSA',
+                    'numero_tarjeta' => $data['numero_tarjeta'], // Método de pago prueba
+                    'estado_transaccion' => 'EXITOSA', // Estado (Usa tu valor 'EXITOSA')
                     'fecha_compra' => now(),
                 ]);
             });
 
-            return redirect()->route('compras.index')->with('message', 'Compra realizada exitosamente.');
+            // Si todo OK, redirige al historial
+            return redirect()->route('compras.index')->with('message', '¡Compra realizada exitosamente!');
 
+        } catch (ValidationException $e) {
+             // Si falló la validación de stock
+             return redirect()->back()->withInput()->withErrors($e->errors());
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('warning', $e->getMessage());
+            // Cualquier otro error durante la transacción
+            return redirect()->back()->withInput()->with('warning', 'Ocurrió un error al procesar la compra: ' . $e->getMessage());
         }
     }
 }

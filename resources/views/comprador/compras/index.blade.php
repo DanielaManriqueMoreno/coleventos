@@ -1,47 +1,22 @@
 @extends('templates.base')
-@section('title', 'Dashboard')
-@section('header', 'Dashboard - Panel de Control')
-
-@section('styles')
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-@endsection
+@section('title', 'Panel del Comprador')
+@section('header', 'Bienvenido al Panel del Comprador')
 
 @section('content')
-
 @include('templates.messages')
-<div class="container mt-5">
-    <h2>Historial de compras</h2>
 
-    @if(session('message'))
-        <p style="color:green">{{ session('message') }}</p>
-    @endif
+<div class="card shadow mb-4">
+    <div class="card-body text-center">
+        <h4>¡Hola, {{ Auth::user()->name }}!</h4>
+        <p>Desde este panel puedes ver los <strong>eventos disponibles</strong> y tu <strong>historial de compras</strong>.</p>
 
-    @if($compras->isEmpty())
-        <p>No has realizado compras aún.</p>
-    @else
-        <table border="1" cellpadding="5">
-            <tr>
-                <th>Evento</th>
-                <th>Localidad</th>
-                <th>Cantidad</th>
-                <th>Valor total</th>
-                <th>Fecha de compra</th>
-                <th>Estado</th>
-            </tr>
-            @foreach($compras as $c)
-            <tr>
-                <td>{{ $c->evento->nombre }}</td>
-                <td>{{ $c->localidad->nombre_localidad }}</td>
-                <td>{{ $c->cantidad_boletas }}</td>
-                <td>${{ $c->valor_total }}</td>
-                <td>{{ $c->fecha_compra }}</td>
-                <td>{{ $c->estado_transaccion }}</td>
-            </tr>
-            @endforeach
-        </table>
-    @endif
+        <a href="{{ route('comprador.eventos.index') }}" class="btn btn-primary m-2">
+            <i class="fas fa-calendar-alt"></i> Ver Eventos
+        </a>
 
+        <a href="{{ route('compras.index') }}" class="btn btn-success m-2">
+            <i class="fas fa-ticket-alt"></i> Mis Compras
+        </a>
+    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+@endsection

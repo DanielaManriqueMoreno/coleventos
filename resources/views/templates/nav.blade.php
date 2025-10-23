@@ -40,6 +40,20 @@
                         Administración 
                     </div>
                     
+                    <li class="nav-item {{ request()->is('admin/users*') ? 'active' : '' }}">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers">
+                            <i class="fas fa-fw fa-users-cog"></i> <span>Gestionar Usuarios</span>
+                        </a>
+                        <div id="collapseUsers" class="collapse {{ request()->is('admin/users*') ? 'show' : '' }}" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="{{ route('admin.users.index') }}">Consultar</a>
+                                <a class="collapse-item" href="{{ route('admin.users.create') }}">Crear Usuario</a>
+                            </div>
+                        </div>
+                    </li>
+                    {{-- FIN NUEVO MENÚ --}}
+
+                    <hr class="sidebar-divider"/>
                     <!-- Artistas -->
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseArtistas"

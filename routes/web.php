@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ArtistaController;
 use App\Http\Controllers\HomeController;
@@ -31,27 +32,33 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/mi-perfil/password', [PasswordController::class, 'edit'])->name('profile.password.edit');
+    Route::put('/mi-perfil/password', [PasswordController::class, 'update'])->name('profile.password.update');
+});
+
 // =============================
 //  PANEL COMPRADOR
 // =============================
-Route::middleware(['auth'])->prefix('comprador')->name('comprador.')->group(function () {
+Route::middleware(['auth', 'role:comprador'])->group(function () { // <-- Clave para RF8
+    
+    Route::get('/comprador/index', function () {
+        return view('comprador.index'); // ✅ Vista: resources/views/comprador/index.blade.php
+    })->name('comprador.index');
 
-    // Redirección desde /comprador/index hacia /comprador/index (listado de eventos)
-    Route::get('/index', [EventoPublicController::class, 'index'])->name('index');
+    // Listado de eventos (para ver y comprar)
+    Route::get('/comprador/eventos', [EventoPublicController::class, 'index'])->name('comprador.eventos.index');
+    Route::get('/comprador/eventos/{id}', [EventoPublicController::class, 'show'])->name('comprador.eventos.show');
 
-    // Ver evento
-    Route::get('/evento/{id}', [EventoPublicController::class, 'show'])->name('show');
+    // RF8 - Proceso de compra
+    Route::get('/comprador/compras/crear/{evento}', [CompraController::class, 'create'])->name('compras.create');
+    Route::post('/comprador/compras', [CompraController::class, 'store'])->name('compras.store');
+    Route::get('/comprador/compras', [CompraController::class, 'index'])->name('compras.index');
 
-    // Compras
-     Route::get('/comprar/{evento}', [CompraController::class, 'create'])->name('compras.create');
-    Route::post('/comprar', [CompraController::class, 'store'])->name('compras.store');
-    Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
-
-    // Historial de compras
-    Route::get('/compras', [CompraController::class, 'index'])->name('compras.index');
-});    
-
-// =============================
+});
+// ============================
 //GESTIÓN DE ARTISTAS
 // =============================
 
@@ -65,7 +72,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/store', [EventoArtistaController::class, 'store'])->name('store');
     Route::delete('/destroy/{artista}', [EventoArtistaController::class, 'destroy'])->name('destroy');
     });
-    
+
     
     Route::get('/admin/evento/index', [EventoController::class, 'index'])->name('admin.evento.index');
     Route::get('/admin/evento/create', [EventoController::class, 'create'])->name('admin.evento.create');
