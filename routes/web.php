@@ -8,6 +8,7 @@ use App\Http\Controllers\BoleteriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\EventoArtistaController;
 use App\Http\Controllers\EventoPublicController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
@@ -58,6 +59,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     
     
     Route::get('/index', [DashboardController::class, 'index'])->name('admin.index');
+
+    Route::prefix('evento/{evento}/artista')->name('evento.artista.')->group(function() { 
+    Route::get('/create', [EventoArtistaController::class, 'create'])->name('create');
+    Route::post('/store', [EventoArtistaController::class, 'store'])->name('store');
+    Route::delete('/destroy/{artista}', [EventoArtistaController::class, 'destroy'])->name('destroy');
+    });
+    
     
     Route::get('/admin/evento/index', [EventoController::class, 'index'])->name('admin.evento.index');
     Route::get('/admin/evento/create', [EventoController::class, 'create'])->name('admin.evento.create');

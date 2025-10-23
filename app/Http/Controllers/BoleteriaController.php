@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // Assuming this is your namespace
 
 use App\Models\Boleteria;
 use App\Models\Evento;
@@ -16,90 +16,117 @@ class BoleteriaController extends Controller
         'localidad_id' => 'localidad',
         'valor_boleta' => 'valor de la boleta',
         'cantidad_disponible' => 'cantidad disponible',
-        'cantidad_inicial' => 'cantidad inicial',
+        // 'cantidad_inicial' no se valida, se calcula
     ];
 
+    /**
+     * Muestra la lista de configuraciones de boletería.
+     */
     public function index()
     {
-        // Cargar relaciones para mostrar nombres, no solo IDs
         $boleterias = Boleteria::with('evento', 'localidad')->get();
-        return view('boleteria.index', compact('boleterias'));
+        // Usa la vista que corresponde a tu ruta admin.boleteria.index
+        return view('admin.boleteria.index', compact('boleterias'));
     }
 
+    /**
+     * Muestra el formulario para crear la configuración.
+     */
     public function create()
     {
-        // Cargar eventos y localidades para los <select> del formulario
-        $eventos = Evento::all();
-        $localidades = Localidad::all();
-        return view('boleteria.create', compact('eventos', 'localidades'));
+        $eventos = Evento::orderBy('nombre')->get();
+        $localidades = Localidad::orderBy('nombre_localidad')->get();
+        // Usa la vista que corresponde a tu ruta admin.boleteria.create
+        return view('admin.boleteria.create', compact('eventos', 'localidades'));
     }
 
+    /**
+     * Guarda la nueva configuración de boletería.
+     */
     public function store(Request $request)
     {
         $rules = [
             'evento_id' => [
                 'required',
-                'exists:eventos,id',
+                'exists:evento,id', // Usa el nombre de tu tabla 'evento'
                 Rule::unique('boleteria')->where(function ($query) use ($request) {
                     return $query->where('localidad_id', $request->localidad_id);
                 }),
             ],
-            'localidad_id' => 'required|exists:localidades,id',
+            'localidad_id' => 'required|exists:localidad,id', // Usa el nombre de tu tabla 'localidad'
             'valor_boleta' => 'required|numeric|min:0',
             'cantidad_disponible' => 'required|integer|min:0',
-            'cantidad_inicial' => 'required|integer|min:0',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = [
+            'evento_id.unique' => 'Ya existe una configuración para este evento y localidad.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
         $validator->setAttributeNames($this->traductionAttributes);
         if ($validator->fails()) {
-            return redirect()->route('boleteria.create')->withInput()->withErrors($validator);
+            // ARREGLADO: Redirige a tu ruta 'admin.boleteria.create'
+            return redirect()->route('admin.boleteria.create')->withInput()->withErrors($validator);
         }
 
-        Boleteria::create($request->all());
+        $data = $request->all();
+        // CORRECCIÓN IMPORTANTE: Establece 'cantidad_inicial' al crear
+        $data['cantidad_inicial'] = $data['cantidad_disponible'];
+
+        Boleteria::create($data);
+
         session()->flash('message', 'Boletería configurada exitosamente');
-        return redirect()->route('boleteria.index');
+        // ARREGLADO: Redirige a tu ruta 'admin.boleteria.index'
+        return redirect()->route('admin.boleteria.index');
     }
 
-    public function show(string $id)
-    {
-        return redirect()->route('boleteria.edit', $id);
-    }
-
+    /**
+     * Muestra el formulario para editar una configuración.
+     */
     public function edit(string $id)
     {
         $boleteria = Boleteria::find($id);
         if ($boleteria) {
-            $eventos = Evento::all();
-            $localidades = Localidad::all();
+            $eventos = Evento::orderBy('nombre')->get();
+            $localidades = Localidad::orderBy('nombre_localidad')->get();
+            // Usa la vista que corresponde a tu ruta admin.boleteria.edit
             return view('admin.boleteria.edit', compact('boleteria', 'eventos', 'localidades'));
-        } else {
-            session()->flash('warning', 'No se encuentra la configuración solicitada');
-            return redirect()->route('boleteria.index');
         }
+
+        session()->flash('warning', 'No se encuentra la configuración solicitada');
+        // ARREGLADO: Redirige a tu ruta 'admin.boleteria.index'
+        return redirect()->route('admin.boleteria.index');
     }
 
+    /**
+     * Actualiza una configuración de boletería.
+     */
     public function update(Request $request, string $id)
     {
+        // La validación de 'update' necesita 'cantidad_inicial'
         $rules = [
             'evento_id' => [
                 'required',
-                'exists:eventos,id',
-                // Regla para clave única compuesta, ignorando el registro actual
+                'exists:evento,id', // Usa tu tabla 'evento'
                 Rule::unique('boleteria')->where(function ($query) use ($request) {
                     return $query->where('localidad_id', $request->localidad_id);
                 })->ignore($id),
             ],
-            'localidad_id' => 'required|exists:localidades,id',
+            'localidad_id' => 'required|exists:localidad,id', // Usa tu tabla 'localidad'
             'valor_boleta' => 'required|numeric|min:0',
             'cantidad_disponible' => 'required|integer|min:0',
-            'cantidad_inicial' => 'required|integer|min:0',
+            'cantidad_inicial' => 'required|integer|min:0', // Necesaria para el update
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = [
+            'evento_id.unique' => 'Ya existe una configuración para este evento y localidad.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
         $validator->setAttributeNames($this->traductionAttributes);
         if ($validator->fails()) {
-            return redirect()->route('boleteria.edit', $id)->withInput()->withErrors($validator);
+            // ARREGLADO: Redirige a tu ruta 'admin.boleteria.edit'
+            return redirect()->route('admin.boleteria.edit', $id)->withInput()->withErrors($validator);
         }
 
         $boleteria = Boleteria::find($id);
@@ -110,9 +137,13 @@ class BoleteriaController extends Controller
             session()->flash('warning', 'No se encuentra la configuración solicitada');
         }
 
-        return redirect()->route('boleteria.index');
+        // ARREGLADO: Redirige a tu ruta 'admin.boleteria.index'
+        return redirect()->route('admin.boleteria.index');
     }
 
+    /**
+     * Elimina una configuración de boletería.
+     */
     public function destroy(string $id)
     {
         $boleteria = Boleteria::find($id);
@@ -123,6 +154,7 @@ class BoleteriaController extends Controller
             session()->flash('warning', 'No se encuentra la configuración solicitada');
         }
 
-        return redirect()->route('boleteria.index');
+        // ARREGLADO: Redirige a tu ruta 'admin.boleteria.index'
+        return redirect()->route('admin.boleteria.index');
     }
 }

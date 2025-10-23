@@ -39,17 +39,17 @@ class ArtistaController extends Controller
         $validator->setAttributeNames($this->traductionAttributes);
         
         if ($validator->fails()) {
-            return redirect()->route('artista.create')->withInput()->withErrors($validator);
+            return redirect()->route('admin.artista.create')->withInput()->withErrors($validator);
         }
 
         Artista::create($request->all());
         session()->flash('message', 'Artista creado exitosamente');
-        return redirect()->route('artista.index');
+        return redirect()->route('admin.artista.index');
     }
 
     public function show(string $id)
     {
-        return redirect()->route('artista.edit', $id);
+        return redirect()->route('admin.artista.edit', $id);
     }
 
     public function edit(string $id)
@@ -61,7 +61,7 @@ class ArtistaController extends Controller
         }
         
         session()->flash('warning', 'No se encuentra el artista solicitado');
-        return redirect()->route('artista.index');
+        return redirect()->route('admin.artista.index');
     }
 
     public function update(Request $request, string $id)
@@ -70,7 +70,7 @@ class ArtistaController extends Controller
         $validator->setAttributeNames($this->traductionAttributes);
         
         if ($validator->fails()) {
-            return redirect()->route('artista.edit', $id)->withInput()->withErrors($validator);
+            return redirect()->route('admin.artista.edit', $id)->withInput()->withErrors($validator);
         }
 
         $artista = Artista::find($id);
@@ -82,7 +82,7 @@ class ArtistaController extends Controller
             session()->flash('warning', 'No se encuentra el artista solicitado');
         }
 
-        return redirect()->route('artista.index');
+        return redirect()->route('admin.artista.index');
     }
 
     public function destroy(string $id)
@@ -96,6 +96,6 @@ class ArtistaController extends Controller
             session()->flash('warning', 'No se encuentra el artista solicitado');
         }
 
-        return redirect()->route('artista.index');
+        return redirect()->route('admin.artista.index');
     }
 }

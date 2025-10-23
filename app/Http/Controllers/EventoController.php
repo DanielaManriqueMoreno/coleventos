@@ -116,6 +116,6 @@ class EventoController extends Controller
             ->orderBy('fecha_hora_inicio', 'asc')
             ->get();
 
-        return view('admin.sevento.index', compact('eventos', 'busqueda'));
+        return view('admin.evento.index', compact('eventos', 'busqueda'));
     }
 }
