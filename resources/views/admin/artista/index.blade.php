@@ -3,13 +3,13 @@
 @section('header', 'Artistas')
 @section('content')
 
+@include('templates.messages')
+
 <div class="row">
     <div class="col-lg-12 mb-4 d-grid gap-2 d-md-block">
-        <a href="{{ route('artista.create') }}" class="btn btn-primary">Crear</a>
+        <a href="{{ route('admin.artista.create') }}" class="btn btn-primary">Crear</a>
     </div>
 </div>
-
-@include('templates.messages')
 
 <div class="row">
     <div class="col-lg-12 mb-4">
@@ -33,10 +33,10 @@
                     <td>{{ $artista->genero_musical }}</td>
                     <td>{{ $artista->ciudad_natal }}</td>
                     <td>
-                        <a href="{{ route('artista.edit', $artista->id) }}"  class="btn btn-primary btn-circle btn-sm" title="Editar">
+                        <a href="{{ route('admin.artista.edit', $artista->id) }}"  class="btn btn-primary btn-circle btn-sm" title="Editar">
                             <i class="far fa-edit"></i>
                         </a>
-                        <a href="{{ route('artista.destroy', $artista->id) }}" class="btn btn-danger btn-circle btn-sm" title="Eliminar" onclick="return remove();">
+                        <a href="{{ route('admin.artista.destroy', $artista->id) }}" class="btn btn-danger btn-circle btn-sm" title="Eliminar" onclick="return remove();">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
